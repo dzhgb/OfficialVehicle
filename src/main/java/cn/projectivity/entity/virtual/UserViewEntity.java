@@ -6,6 +6,7 @@ public class UserViewEntity {
     private String name;
     private String openid;
     private String nickname;
+    private String roleName;
 
     public long getId() {
         return id;
@@ -47,14 +48,23 @@ public class UserViewEntity {
         this.nickname = nickname;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     @Override
     public String toString() {
-        return "DatatablesUser{" +
+        return "UserViewEntity{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
                 ", openid='" + openid + '\'' +
                 ", nickname='" + nickname + '\'' +
+                ", roleName='" + roleName + '\'' +
                 '}';
     }
 }

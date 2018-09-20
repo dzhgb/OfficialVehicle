@@ -17,4 +17,8 @@ public interface UserService {
     public User findByOpenid(String openid);
 
     public User save(User user);
+
+    public void delete(User user);
+
+    public void deleteById(long id);
 }

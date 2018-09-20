@@ -1,10 +1,8 @@
 package cn.projectivity.controller;
 
 import cn.projectivity.entity.SysRole;
-import cn.projectivity.entity.User;
 import cn.projectivity.entity.virtual.DatatablesViewPage;
 import cn.projectivity.entity.virtual.RoleViewEntity;
-import cn.projectivity.entity.virtual.UserViewEntity;
 import cn.projectivity.service.SysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +31,7 @@ public class RoleManageController {
     public String role_list(@PageableDefault(sort = {"id"})Pageable pageable, Model model){
         Page<SysRole> roleList = sysRoleService.findAll(pageable);
         model.addAttribute("roleList", roleList);
-        return "admin/role_list";
+        return "admin/role/role_list";
     }
 
     @RequestMapping(value = "/list/data", method = RequestMethod.GET)

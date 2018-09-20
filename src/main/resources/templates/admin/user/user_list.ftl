@@ -25,8 +25,8 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-    <#include "topbar.ftl">
-    <#include "sidebar.ftl">
+    <#include "../topbar.ftl">
+    <#include "../sidebar.ftl">
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -50,16 +50,17 @@
 
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">角色管理</h3>
+                            <h3 class="box-title">用户列表</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <table id="dataTable" class="table table-bordered table-striped">
+                            <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>角色代码</th>
-                                    <th>角色名称</th>
-                                    <th>是否可用</th>
+                                    <th>ID</th>
+                                    <th>账号</th>
+                                    <th>姓名</th>
+                                    <th>角色</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -299,9 +300,9 @@
 <!-- page script -->
 <script>
     $(function () {
-        expandMenu("role");
+        expandMenu("user");
 
-        table = $('#dataTable').DataTable( {
+        table = $('#example1').DataTable( {
             "pagingType": "full_numbers",//设置分页控件的模式
             searching: false,
             ordering: false,
@@ -325,7 +326,7 @@
             "processing": true, //打开数据加载时的等待效果
             "serverSide": true,//打开后台分页
             "ajax": {
-                "url": "/admin/role/list/data",
+                "url": "/admin/user/list/ajax",
                 "dataSrc": "aaData",
                 "data": function(d) {
                     var params = "";
@@ -334,13 +335,27 @@
                 }
             },
             "columns": [
-                { "data": "role" },
-                { "data": "description" },
-                { "data": "available" }
-            ]
-
+                { "data": "id" },
+                { "data": "username" },
+                { "data": "name" },
+                { "data": "roleName" }
+            ],
+            "columnDefs": [{
+                targets: 4,
+                render: function(data, type, row, meta) {
+                    var html = "<button type=\"button\" class=\"btn btn-danger btn-xs margin-r-5\" onclick=\"delData(" + row.id + ")\"> 删除 </button>";
+                    return html;
+                }
+            }]
         } );
     });
+
+    function delData(id){
+        var r = confirm("数据删除后不可恢复，确定删除？");
+        if(r){
+            window.location.href = "/admin/user/" + id + "/del";
+        }
+    }
 </script>
 </body>
 </html>

@@ -1,8 +1,9 @@
 package cn.projectivity.controller;
 
+import cn.projectivity.entity.SysRole;
 import cn.projectivity.entity.User;
-import cn.projectivity.entity.virtual.UserViewEntity;
 import cn.projectivity.entity.virtual.DatatablesViewPage;
+import cn.projectivity.entity.virtual.UserViewEntity;
 import cn.projectivity.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,7 +40,7 @@ public class UserManageController {
     public String userInfo(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable, Model model){
         Page<User> userList = userService.findAll(pageable);
         model.addAttribute("userList", userList);
-        return "admin/user_list";
+        return "admin/user/user_list";
     }
 
     /**
@@ -65,6 +67,15 @@ public class UserManageController {
             dtUser.setName(u.getName());
             dtUser.setOpenid(u.getOpenid());
             dtUser.setNickname(u.getNickname());
+            String roleName = "";
+            for(SysRole r: u.getRoleList()){
+                if(roleName.length() > 0){
+                    roleName += "|" + r.getDescription();
+                }else{
+                    roleName += r.getDescription();
+                }
+            }
+            dtUser.setRoleName(roleName);
             dtList.add(dtUser);
         }
         DatatablesViewPage<UserViewEntity> view = new DatatablesViewPage<>();
@@ -88,9 +99,10 @@ public class UserManageController {
      * 用户删除;
      * @return
      */
-    @RequestMapping("/userDel")
+    @RequestMapping("/{id}/del")
     @RequiresPermissions("userInfo:del")//权限管理;
-    public String userDel(){
-        return "admin/userInfoDel";
+    public String userDel(@PathVariable String id){
+        userService.deleteById(Long.valueOf(id));
+        return "redirect:/admin/user/list";
     }
 }
